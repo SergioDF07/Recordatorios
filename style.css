@@ -3,7 +3,7 @@ body {
   font-family: sans-serif;
   margin: 0;
   padding: 0;
-  background: #f5f5f5;
+  background-color: hwb(196 81% 0%);
 }
 
 header {

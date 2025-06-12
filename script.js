@@ -1,3 +1,7 @@
+// Variables globales para controlar el mes y año actual
+let currentMonth = new Date().getMonth();
+let currentYear = new Date().getFullYear();
+
 // Función para guardar recordatorios
 function guardarRecordatorio() {
   const titulo = document.getElementById("titulo").value;
@@ -28,9 +32,11 @@ function guardarRecordatorio() {
   setTimeout(() => {
     confirmacion.remove();
   }, 3000);
+
+  mostrarCalendario();
 }
 
-// Función para mostrar todos los recordatorios
+// Mostrar todos los recordatorios
 function mostrarTodos() {
   const contenedor = document.getElementById("lista-recordatorios");
   contenedor.innerHTML = "";
@@ -60,11 +66,12 @@ function eliminarRecordatorio(index) {
   if (index >= 0 && index < recordatorios.length) {
     recordatorios.splice(index, 1);
     localStorage.setItem("recordatorios", JSON.stringify(recordatorios));
-    mostrarTodos(); // Recargar la lista
+    mostrarTodos();
+    mostrarCalendario();
   }
 }
 
-// Mostrar estadísticas de usuario (para usuario.html)
+// Estadísticas
 function mostrarEstadisticas() {
   const hoy = new Date().toISOString().split("T")[0];
   const recordatorios = JSON.parse(localStorage.getItem("recordatorios")) || [];
@@ -78,24 +85,34 @@ function mostrarEstadisticas() {
   document.getElementById("completados-count").textContent = completados;
 }
 
-// Función auxiliar para obtener nombre del mes
+// Obtener nombre del mes
 function obtenerNombreMes(mes) {
   const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
                  'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
   return meses[mes];
 }
 
-// Función para cambiar de mes
+// Cambiar mes (CORREGIDO)
 function cambiarMes(delta) {
-  console.log("Cambiar mes:", delta);
-}
-
-// Función para ir al mes actual
-function irAHoy() {
+  currentMonth += delta;
+  if (currentMonth > 11) {
+    currentMonth = 0;
+    currentYear++;
+  } else if (currentMonth < 0) {
+    currentMonth = 11;
+    currentYear--;
+  }
   mostrarCalendario();
 }
 
-// Función para mostrar el calendario
+// Ir al mes actual
+function irAHoy() {
+  currentMonth = new Date().getMonth();
+  currentYear = new Date().getFullYear();
+  mostrarCalendario();
+}
+
+// Mostrar calendario actualizado
 function mostrarCalendario() {
   const contenedor = document.getElementById("calendario");
   const recordatorios = JSON.parse(localStorage.getItem("recordatorios")) || [];
@@ -106,11 +123,9 @@ function mostrarCalendario() {
     mapaEventos[r.fecha].push(r);
   });
 
+  const primerDia = new Date(currentYear, currentMonth, 1);
+  const ultimoDia = new Date(currentYear, currentMonth + 1, 0);
   const hoy = new Date();
-  const año = hoy.getFullYear();
-  const mes = hoy.getMonth();
-  const primerDia = new Date(año, mes, 1);
-  const ultimoDia = new Date(año, mes + 1, 0);
 
   let diaSemanaInicio = primerDia.getDay();
   diaSemanaInicio = diaSemanaInicio === 0 ? 6 : diaSemanaInicio - 1;
@@ -118,17 +133,17 @@ function mostrarCalendario() {
   let html = `
     <div class="calendar-container">
       <div class="calendar-header">
-        <div class="calendar-month">${obtenerNombreMes(mes)} ${año}</div>
+        <div class="calendar-month">${obtenerNombreMes(currentMonth)} ${currentYear}</div>
         <div class="calendar-title">Calendario de Recordatorios</div>
       </div>
 
       <div class="calendar-nav">
-        <button onclick="cambiarMes(-1)">‹ Mes anterior</button>
-        <button onclick="irAHoy()">Hoy</button>
-        <button onclick="cambiarMes(1)">Mes siguiente ›</button>
+        <button onclick="cambiarMes(-1)" class="btn btn-outline-secondary">‹ Mes anterior</button>
+        <button onclick="irAHoy()" class="btn btn-outline-primary">Hoy</button>
+        <button onclick="cambiarMes(1)" class="btn btn-outline-secondary">Mes siguiente ›</button>
       </div>
 
-      <table width="100%">
+      <table class="table table-bordered" width="100%">
         <thead class="calendar-weekdays">
           <tr>
             <th>Lun</th><th>Mar</th><th>Mié</th><th>Jue</th><th>Vie</th><th>Sáb</th><th>Dom</th>
@@ -152,8 +167,8 @@ function mostrarCalendario() {
       diaSemana = 0;
     }
 
-    const fechaCompleta = `${año}-${String(mes + 1).padStart(2, "0")}-${String(fechaActual).padStart(2, "0")}`;
-    const esHoy = hoy.getDate() === fechaActual && hoy.getMonth() === mes && hoy.getFullYear() === año;
+    const fechaCompleta = `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(fechaActual).padStart(2, "0")}`;
+    const esHoy = hoy.getDate() === fechaActual && hoy.getMonth() === currentMonth && hoy.getFullYear() === currentYear;
     const claseDia = esHoy ? 'today' : 'calendar-day';
 
     let eventosHTML = '';

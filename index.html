@@ -4,10 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Reminder</title>
+  <link rel="icon" href="calendar.png" type="image/png">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
-      background-color: beige;
+        background-color: hwb(196 81% 0%);
     }
     .form-container {
       max-width: 400px;
@@ -17,6 +18,16 @@
       border-radius: 15px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
+
+      .logo-container {
+      text-align: center;
+      margin: 15px 0;
+    }
+    .logo-img {
+      width: 60px; /* Tamaño reducido */
+      height: 60px; /* Tamaño reducido */
+      object-fit: contain; /* Para mantener proporciones */
+    }
   </style>
 </head>
 <body>
@@ -25,6 +36,12 @@
     <div class="form-container">
       <h2 class="mb-4 text-center">Inicia sesion</h2>
       <form onsubmit="return iniciarSesion(event)">
+
+          <!-- Imagen centrada debajo del título -->
+      <div class="logo-container">
+        <img src="calendar.png" alt="Logo" class="logo-img">
+      </div>
+      
         <div class="mb-3">
           <label for="nombre" class="form-label">Nombre</label>
           <input type="text" class="form-control" id="nombre" placeholder="Ingresa tu nombre..." required>

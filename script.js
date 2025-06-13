@@ -1,8 +1,6 @@
-// Variables globales para controlar el mes y año actual
 let currentMonth = new Date().getMonth();
 let currentYear = new Date().getFullYear();
 
-// Función para guardar recordatorios
 function guardarRecordatorio() {
   const titulo = document.getElementById("titulo").value;
   const fecha = document.getElementById("fecha").value;
@@ -36,7 +34,7 @@ function guardarRecordatorio() {
   mostrarCalendario();
 }
 
-// Mostrar todos los recordatorios
+
 function mostrarTodos() {
   const contenedor = document.getElementById("lista-recordatorios");
   contenedor.innerHTML = "";
@@ -60,7 +58,7 @@ function mostrarTodos() {
   });
 }
 
-// Eliminar un recordatorio
+
 function eliminarRecordatorio(index) {
   const recordatorios = JSON.parse(localStorage.getItem("recordatorios")) || [];
   if (index >= 0 && index < recordatorios.length) {
@@ -71,7 +69,6 @@ function eliminarRecordatorio(index) {
   }
 }
 
-// Estadísticas
 function mostrarEstadisticas() {
   const hoy = new Date().toISOString().split("T")[0];
   const recordatorios = JSON.parse(localStorage.getItem("recordatorios")) || [];
@@ -85,14 +82,12 @@ function mostrarEstadisticas() {
   document.getElementById("completados-count").textContent = completados;
 }
 
-// Obtener nombre del mes
 function obtenerNombreMes(mes) {
   const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
                  'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
   return meses[mes];
 }
 
-// Cambiar mes (CORREGIDO)
 function cambiarMes(delta) {
   currentMonth += delta;
   if (currentMonth > 11) {
@@ -105,14 +100,12 @@ function cambiarMes(delta) {
   mostrarCalendario();
 }
 
-// Ir al mes actual
 function irAHoy() {
   currentMonth = new Date().getMonth();
   currentYear = new Date().getFullYear();
   mostrarCalendario();
 }
 
-// Mostrar calendario actualizado
 function mostrarCalendario() {
   const contenedor = document.getElementById("calendario");
   const recordatorios = JSON.parse(localStorage.getItem("recordatorios")) || [];
@@ -192,7 +185,6 @@ function mostrarCalendario() {
   contenedor.innerHTML = html;
 }
 
-// Cargar funciones al abrir la página
 document.addEventListener('DOMContentLoaded', function () {
   if (document.getElementById('calendario')) {
     mostrarCalendario();
